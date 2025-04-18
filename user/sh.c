@@ -135,7 +135,7 @@ runcmd(struct cmd *cmd)
 int
 getcmd(char *buf, int nbuf)
 {
-  write(2, "Zahra-Abdolhosseini/Mostafa-Rastgar", 35);
+  write(2, "Zahra-Abdolhosseini/Mostafa-Rastgar ", 36);
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if(buf[0] == 0) // EOF
@@ -166,6 +166,36 @@ main(void)
         fprintf(2, "cannot cd %s\n", buf+3);
       continue;
     }
+    if(buf[0] == '!' && buf[1] == ' '){
+      char *message = buf + 2;
+      int len = strlen(message);
+    
+      // حذف \n انتهای پیام
+      if(len > 0 && message[len - 1] == '\n')
+        message[len - 1] = '\0';
+    
+      if(strlen(message) > 512){
+        printf("long too Message\n");
+        continue;
+      }
+    
+      // چاپ پیام با رنگ برای "os"
+      for(int i = 0; message[i]; i++){
+        if(message[i] == 'o' && message[i+1] == 's'){
+          write(1, "\x1b[34m", 5); // آبی
+          write(1, "os", 2);
+          write(1, "\x1b[0m", 4);  // ریست رنگ
+          i++;
+        } else {
+          write(1, &message[i], 1);  // چاپ مستقیم بدون تفسیر %
+        }
+      }
+    
+      write(1, "\n", 1);
+      continue;
+    }
+    
+
     if(fork1() == 0)
       runcmd(parsecmd(buf));
     wait(0);
