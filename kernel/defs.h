@@ -118,6 +118,9 @@ void            release(struct spinlock*);
 void            push_off(void);
 void            pop_off(void);
 
+void            log_message(int level, const char* message);
+uint64          sys_trigger(void);
+
 // sleeplock.c
 void            acquiresleep(struct sleeplock*);
 void            releasesleep(struct sleeplock*);
